@@ -195,6 +195,8 @@ class MainFrame(wx.Frame):
         h,w,c=frame.shape
         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
         self.videoOutput=cv2.VideoWriter(self.filenameToSave, fourcc,16.0, (w,h))
+        self.videoOutput.set(cv2.VIDEOWRITER_PROP_QUALITY,100)
+#        self.videoOutput=cv2.VideoWriter(self.filenameToSave, -1,16.0, (w,h))
         self.capFrameCnt=0
         self.capTimer=wx.Timer(self)
         self.Bind(wx.EVT_TIMER,self.captureNextFrame,self.capTimer)
@@ -216,14 +218,17 @@ class MainFrame(wx.Frame):
             if not ret:
                 self.SetStatusText("Capture error")
                 return
+#            frame=cv2.flip(frame,0)
+#            frame=cv2.flip(frame,1)
             if ff is None:
                 h,w,c=frame.shape
                 ff=numpy.require(frame,dtype=numpy.float32)
             else:
-                #ff+=frame
-                ff=numpy.minimum(ff,frame)
-        #ff/=10
+                ff+=frame
+                #ff=numpy.minimum(ff,frame)
+        ff/=10
         frame=numpy.require(ff,dtype=numpy.uint8)
+        frame=cv2.flip(frame,1)
 
         self.frameForward(None)
         
@@ -249,15 +254,15 @@ class MainFrame(wx.Frame):
             print("Serial disconnected")
     
     def frameBack(self,event):
-        self.serialCommand("128+")
+        self.serialCommand("128-")
     def stepBack(self,event):
-        self.serialCommand("8+")
+        self.serialCommand("4-")
     def stepForward(self,event):
-        self.serialCommand("8-")
+        self.serialCommand("4+")
     def frameForward(self,event):
         global stepindex,steps
         ns=steps[stepindex]
-        self.serialCommand("%s<"%ns)
+        self.serialCommand("%s>"%ns)
         stepindex+=1
         stepindex&=15
 

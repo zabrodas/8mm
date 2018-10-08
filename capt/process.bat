@@ -1,0 +1,1 @@
+start C:\utils\virtual-dub\VirtualDub-1.10.4\VirtualDub.exe  /i process.vdscript
