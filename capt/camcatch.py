@@ -164,6 +164,8 @@ class MainFrame(wx.Frame):
         if not ret: return None
         h,w,c=frame.shape
         dt=frame.dtype
+        frame1=cv2.flip(frame,1)
+        frame[:,:,0],frame[:,:,1],frame[:,:,2]=(frame1[:,:,2],frame1[:,:,1],frame1[:,:,0])
         data=frame.data # tobytes('C')
         bmp=wx.Bitmap.FromBuffer(w,h,data)
         ws=self.preview.GetSize()

@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
     b = ProcessBackglight()
 
-    if False :
-        cap = cv2.VideoCapture(sys.argv[1])
+    if True :
+        cap = cv2.VideoCapture("blank.avi")
         b.startAnl()
     
         while(cap.isOpened()):
