@@ -27,6 +27,7 @@ class ProcessBackglight:
         self.blank/=self.cnt
         avg=np.average(self.blank)
         self.blank=avg/self.blank
+        self.blank=np.clip(self.blank,0,3)
 
     def processFrame(self,img):
         f=img*self.blank

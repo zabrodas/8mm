@@ -214,14 +214,18 @@ class MainFrame(wx.Frame):
 
     def captureNextFrame(self,event):
         if self.videoOutput is None: return
+
+        # drop buffered frames
+#        for i in range(5):
+#            ret,frame=self.camera.read()
+
         ff=None
         for i in range(10):
             ret,frame=self.camera.read()
             if not ret:
                 self.SetStatusText("Capture error")
                 return
-#            frame=cv2.flip(frame,0)
-#            frame=cv2.flip(frame,1)
+            frame=cv2.flip(frame,1)
             if ff is None:
                 h,w,c=frame.shape
                 ff=numpy.require(frame,dtype=numpy.float32)
@@ -230,7 +234,7 @@ class MainFrame(wx.Frame):
                 #ff=numpy.minimum(ff,frame)
         ff/=10
         frame=numpy.require(ff,dtype=numpy.uint8)
-        frame=cv2.flip(frame,1)
+#        frame=cv2.flip(frame,1)
 
         self.frameForward(None)
         
